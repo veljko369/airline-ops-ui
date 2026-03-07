@@ -4,7 +4,8 @@ function FlightList() {
   const [flights, setFlights] = useState([]);
   const [selectedFlight, setSelectedFlight] = useState(null);
 
-  useEffect(() => {
+
+  function loadFlights() {
     fetch("http://localhost:8080/api/flights", {
       headers: {
         Authorization: "Basic " + btoa("admin:admin123"),
@@ -13,6 +14,11 @@ function FlightList() {
       .then((response) => response.json())
       .then((data) => setFlights(data))
       .catch((error) => console.error("Error loading flights:", error));
+  }
+
+
+  useEffect(() => {
+    loadFlights();
   }, []);
 
 
@@ -33,16 +39,7 @@ function FlightList() {
         return response.json();
       })
       .then(() => {
-        // ucitavanje letova nakon toga
-        return fetch("http://localhost:8080/api/flights", {
-          headers: {
-            Authorization: "Basic " + btoa("admin:admin123"),
-          },
-        });
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        setFlights(data);
+        loadFlights();
         setSelectedFlight(null);
       })
       .catch((error) => console.error("Error updating status:", error));
