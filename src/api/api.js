@@ -41,3 +41,16 @@ export function getAirports() {
         },
     }).then((response) => response.json());
 }
+
+
+
+export function createAirport(airportData) {
+    return fetch(`${BASE_URL}/api/airports`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: AUTH_HEADER,
+        },
+        body: JSON.stringify(airportData),
+    }).then((response) => response.json);
+}
