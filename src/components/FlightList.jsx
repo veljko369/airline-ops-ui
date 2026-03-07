@@ -43,6 +43,11 @@ function FlightList() {
         </p>
       ))}
 
+
+
+
+      <h3>Selected Flight:</h3>
+
       {selectedFlight && (
         <>
           <h3>Selected Flight</h3>

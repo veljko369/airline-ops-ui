@@ -66,3 +66,14 @@ export function createAircraft(aircraftData) {
         body: JSON.stringify(aircraftData),
     }).then((response) => response.json());
 }
+
+
+
+export function deleteAircraft(id){
+    return fetch(`${BASE_URL}/api/aircraft/${id}`,{
+        method: "DELETE",
+        headers:{
+            Authorization: AUTH_HEADER,
+        },
+    })
+}

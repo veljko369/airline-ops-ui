@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAircraft, createAircraft } from "../api/api";
+import { getAircraft, createAircraft, deleteAircraft } from "../api/api";
 
 function AircraftList() {
     const [aircraft, setAircraft] = useState([]);
@@ -51,6 +51,16 @@ function AircraftList() {
             .catch((error) => console.error("Error creating aircraft:", error));
     }
 
+
+
+    function handleDeleteAircraft(id) {
+        deleteAircraft(id)
+            .then(() => {
+                loadAircraft();
+                setSelectedAircraft(null);
+            })
+            .catch((error) => console.error("Error deleting aircraft:", error));
+    }
 
 
 
@@ -120,15 +130,21 @@ function AircraftList() {
                 </p>
             ))}
 
+            <h3>Selected Aircraft:</h3>
+
             {selectedAircraft && (
                 <>
-                    <h3>Selected Aircraft</h3>
+
 
                     <p>Registration: {selectedAircraft.registration}</p>
                     <p>Manufacturer: {selectedAircraft.manufacturer}</p>
                     <p>Type: {selectedAircraft.type}</p>
                     <p>Seating Capacity: {selectedAircraft.seatingCapacity}</p>
                     <p>Max Takeoff Weight: {selectedAircraft.maxTakeoffWeightKg} kg</p>
+
+                    <button onClick={() => handleDeleteAircraft(selectedAircraft.id)}>
+                        Delete Aircraft
+                    </button>
                 </>
             )}
         </>

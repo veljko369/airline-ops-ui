@@ -106,10 +106,11 @@ function AirportList() {
 
 
 
+            <h3>Selected airport:</h3>
 
             {
                 selectedAirport && (<>
-                    <h3>Selected airport</h3>
+
                     <p>Code: {selectedAirport.code}</p>
                     <p>Name: {selectedAirport.name}</p>
                     <p>City: {selectedAirport.city}</p>
