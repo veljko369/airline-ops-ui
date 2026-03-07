@@ -15,6 +15,44 @@ function FlightList() {
       .catch((error) => console.error("Error loading flights:", error));
   }, []);
 
+
+
+  function updateFlightStatus(id, status) {
+    fetch(`http://localhost:8080/api/flights/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa("admin:admin123"),
+      },
+      body: JSON.stringify({ status: status }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update status");
+        }
+        return response.json();
+      })
+      .then(() => {
+        // ucitavanje letova nakon toga
+        return fetch("http://localhost:8080/api/flights", {
+          headers: {
+            Authorization: "Basic " + btoa("admin:admin123"),
+          },
+        });
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        setFlights(data);
+        setSelectedFlight(null);
+      })
+      .catch((error) => console.error("Error updating status:", error));
+  }
+
+
+
+
+
+
   return (
     <>
       <h2>Flight List</h2>
@@ -33,6 +71,21 @@ function FlightList() {
           <p>Departure: {selectedFlight.originAirport.city}</p>
           <p>Arrival: {selectedFlight.destinationAirport.city}</p>
           <p>Status: {selectedFlight.status}</p>
+
+          <p>Change status:</p>
+
+          <button onClick={() => updateFlightStatus(selectedFlight.id, "SCHEDULED")}>
+            Set SCHEDULED
+          </button>
+
+          <button onClick={() => updateFlightStatus(selectedFlight.id, "BOARDING")}>
+            Set BOARDING
+          </button>
+
+          <button onClick={() => updateFlightStatus(selectedFlight.id, "DELAYED")}>
+            Set DELAYED
+          </button>
+
         </>
       )}
     </>
