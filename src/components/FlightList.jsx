@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 function FlightList() {
   
@@ -26,18 +27,30 @@ function FlightList() {
 
   ];
 
+  const [selectedFlight, setSelectedFlight] = useState(null);
+
   return (
 
     <>
       <h2>Flight List</h2>
 
       {flights.map((flight) => (
-        
-        <p key={flight.id}>
+        <p key={flight.id} onClick={() => setSelectedFlight(flight)}>
             {flight.flightNumber} - {flight.departure} to {flight.arrival} - {flight.status}
         </p>
-        
       ))}
+
+       {selectedFlight && (
+        <>
+          <h3>Selected Flight</h3>
+
+          <p>Flight Number: {selectedFlight.flightNumber}</p>
+          <p>Departure: {selectedFlight.departure}</p>
+          <p>Arrival: {selectedFlight.arrival}</p>
+          <p>Status: {selectedFlight.status}</p>
+        </>
+      )}
+      
     </>
 
   );
