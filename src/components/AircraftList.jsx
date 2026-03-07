@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
+import { getAircraft } from "../api/api";
 
 function AircraftList() {
     const [aircraft, setAircraft] = useState([]);
     const [selectedAircraft, setSelectedAircraft] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/aircraft", {
-            headers: {
-                Authorization: "Basic " + btoa("admin:admin123"),
-            },
-        })
-            .then((response) => response.json())
+        getAircraft()
             .then((data) => setAircraft(data))
             .catch((error) => console.error("Error loading aircraft:", error));
     }, []);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getFlights, updateFlightStatus } from "../api/api";
 
 function FlightList() {
   const [flights, setFlights] = useState([]);
@@ -6,12 +7,7 @@ function FlightList() {
 
 
   function loadFlights() {
-    fetch("http://localhost:8080/api/flights", {
-      headers: {
-        Authorization: "Basic " + btoa("admin:admin123"),
-      },
-    })
-      .then((response) => response.json())
+    getFlights()
       .then((data) => setFlights(data))
       .catch((error) => console.error("Error loading flights:", error));
   }
@@ -23,21 +19,8 @@ function FlightList() {
 
 
 
-  function updateFlightStatus(id, status) {
-    fetch(`http://localhost:8080/api/flights/${id}/status`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa("admin:admin123"),
-      },
-      body: JSON.stringify({ status: status }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to update status");
-        }
-        return response.json();
-      })
+  function handeUpdateFlightStatus(id, status) {
+    updateFlightStatus(id, status)
       .then(() => {
         loadFlights();
         setSelectedFlight(null);
@@ -71,15 +54,15 @@ function FlightList() {
 
           <p>Change status:</p>
 
-          <button onClick={() => updateFlightStatus(selectedFlight.id, "SCHEDULED")}>
+          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "SCHEDULED")}>
             Set SCHEDULED
           </button>
 
-          <button onClick={() => updateFlightStatus(selectedFlight.id, "BOARDING")}>
+          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "BOARDING")}>
             Set BOARDING
           </button>
 
-          <button onClick={() => updateFlightStatus(selectedFlight.id, "DELAYED")}>
+          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "DELAYED")}>
             Set DELAYED
           </button>
 

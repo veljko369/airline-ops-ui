@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
+import { getAirports } from "../api/api";
 
 function AirportList() {
     const [airports, setAirports] = useState([]);
     const [selectedAirport, setSelectedAirport] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/airports", {
-            headers: {
-                Authorization: "Basic " + btoa("admin:admin123"),
-            },
-        })
-            .then((response) => response.json())
+        getAirports()
             .then((data) => setAirports(data))
             .catch((error) => console.error("Error loading airports:", error));
     }, [])
