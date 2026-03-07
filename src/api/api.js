@@ -54,3 +54,15 @@ export function createAirport(airportData) {
         body: JSON.stringify(airportData),
     }).then((response) => response.json);
 }
+
+
+export function createAircraft(aircraftData) {
+    return fetch(`${BASE_URL}/api/aircraft`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: AUTH_HEADER,
+        },
+        body: JSON.stringify(aircraftData),
+    }).then((response) => response.json());
+}

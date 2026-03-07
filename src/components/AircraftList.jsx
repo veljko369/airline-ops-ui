@@ -1,18 +1,117 @@
 import { useEffect, useState } from "react";
-import { getAircraft } from "../api/api";
+import { getAircraft, createAircraft } from "../api/api";
 
 function AircraftList() {
     const [aircraft, setAircraft] = useState([]);
     const [selectedAircraft, setSelectedAircraft] = useState(null);
 
-    useEffect(() => {
+
+    const [manufacturer, setManufacturer] = useState("");
+    const [type, setType] = useState("");
+    const [registration, setRegistration] = useState("");
+    const [seatingCapacity, setSeatingCapacity] = useState("");
+    const [maxTakeoffWeightKg, setMaxTakeoffWeightKg] = useState("");
+
+
+    function loadAircraft() {
         getAircraft()
             .then((data) => setAircraft(data))
             .catch((error) => console.error("Error loading aircraft:", error));
+    }
+
+
+
+    useEffect(() => {
+        loadAircraft();
     }, []);
+
+
+
+    function handleCreateAircraft(event) {
+        event.preventDefault();
+
+        const newAircraft = {
+            manufacturer,
+            type,
+            registration,
+            seatingCapacity: Number(seatingCapacity),
+            maxTakeoffWeightKg: Number(maxTakeoffWeightKg),
+        };
+
+        createAircraft(newAircraft)
+            .then(() => {
+                loadAircraft();
+
+                setManufacturer("");
+                setType("");
+                setRegistration("");
+                setSeatingCapacity("");
+                setMaxTakeoffWeightKg("");
+            })
+            .catch((error) => console.error("Error creating aircraft:", error));
+    }
+
+
+
+
 
     return (
         <>
+
+            <h2>Create Aircraft</h2>
+
+            <form onSubmit={handleCreateAircraft}>
+
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Manufacturer"
+                        value={manufacturer}
+                        onChange={(event) => setManufacturer(event.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Type"
+                        value={type}
+                        onChange={(event) => setType(event.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Registration"
+                        value={registration}
+                        onChange={(event) => setRegistration(event.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Seating Capacity"
+                        value={seatingCapacity}
+                        onChange={(event) => setSeatingCapacity(event.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Max Takeoff Weight (kg)"
+                        value={maxTakeoffWeightKg}
+                        onChange={(event) => setMaxTakeoffWeightKg(event.target.value)}
+                    />
+                </div>
+
+                <button type="submit">Create Aircraft</button>
+
+            </form>
+
+
             <h2>Aircraft List</h2>
 
             {aircraft.map((plane) => (
