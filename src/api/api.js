@@ -87,3 +87,15 @@ export function deleteFlight(id) {
         },
     });
 }
+
+
+export function createFlight(flightData) {
+    return fetch(`${BASE_URL}/api/flights`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: AUTH_HEADER,
+        },
+        body: JSON.stringify(flightData),
+    }).then((response) => response.json());
+}
