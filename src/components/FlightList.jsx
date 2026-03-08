@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFlights, updateFlightStatus } from "../api/api";
+import { getFlights, updateFlightStatus, deleteFlight } from "../api/api";
 
 function FlightList() {
   const [flights, setFlights] = useState([]);
@@ -31,6 +31,15 @@ function FlightList() {
 
 
 
+  function handleDeleteFlight(id) {
+    deleteFlight(id)
+      .then(() => {
+        loadFlights();
+        setSelectedFlight(null);
+      })
+      .catch((error) => console.error("Error deleting flight:", error));
+  }
+
 
 
   return (
@@ -50,7 +59,6 @@ function FlightList() {
 
       {selectedFlight && (
         <>
-          <h3>Selected Flight</h3>
 
           <p>Flight Number: {selectedFlight.flightNumber}</p>
           <p>Departure: {selectedFlight.originAirport.city}</p>
@@ -69,6 +77,11 @@ function FlightList() {
 
           <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "DELAYED")}>
             Set DELAYED
+          </button>
+
+          <p>Delete flight:</p>
+          <button onClick={() => handleDeleteFlight(selectedFlight.id)}>
+            Delete
           </button>
 
         </>

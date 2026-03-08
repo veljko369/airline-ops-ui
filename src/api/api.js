@@ -69,11 +69,21 @@ export function createAircraft(aircraftData) {
 
 
 
-export function deleteAircraft(id){
-    return fetch(`${BASE_URL}/api/aircraft/${id}`,{
+export function deleteAircraft(id) {
+    return fetch(`${BASE_URL}/api/aircraft/${id}`, {
         method: "DELETE",
-        headers:{
+        headers: {
             Authorization: AUTH_HEADER,
         },
     })
+}
+
+
+export function deleteFlight(id) {
+    return fetch(`${BASE_URL}/api/flights/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: AUTH_HEADER,
+        },
+    });
 }
