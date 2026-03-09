@@ -16,12 +16,9 @@ function AirportList() {
             .catch((error) => console.error("Error loading airports:", error));
     }
 
-
     useEffect(() => {
         loadAirports();
-    }, [])
-
-
+    }, []);
 
     function handleCreateAirport(event) {
         event.preventDefault();
@@ -40,19 +37,16 @@ function AirportList() {
                 setName("");
                 setCity("");
                 setCountry("");
+                setSelectedAirport(null);
             })
             .catch((error) => console.error("Error creating airport:", error));
     }
-
-
 
     return (
         <>
             <h2>Create Airport</h2>
 
             <form onSubmit={handleCreateAirport}>
-
-
                 <div>
                     <input
                         type="text"
@@ -90,37 +84,27 @@ function AirportList() {
                 </div>
 
                 <button type="submit">Create Airport</button>
-
-
             </form>
 
-
-
-
             <h2>Airport list</h2>
+
             {airports.map((airport) => (
                 <p key={airport.id} onClick={() => setSelectedAirport(airport)}>
                     {airport.code} - {airport.name}
                 </p>
             ))}
 
-
-
             <h3>Selected airport:</h3>
 
-            {
-                selectedAirport && (<>
-
+            {selectedAirport && (
+                <>
                     <p>Code: {selectedAirport.code}</p>
                     <p>Name: {selectedAirport.name}</p>
                     <p>City: {selectedAirport.city}</p>
                     <p>Country: {selectedAirport.country}</p>
                 </>
-                )
-            }
-
+            )}
         </>
-
     );
 }
 

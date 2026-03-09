@@ -5,13 +5,11 @@ function AircraftList() {
     const [aircraft, setAircraft] = useState([]);
     const [selectedAircraft, setSelectedAircraft] = useState(null);
 
-
     const [manufacturer, setManufacturer] = useState("");
-    const [type, setType] = useState("");
+    const [aircraftType, setAircraftType] = useState("");
     const [registration, setRegistration] = useState("");
     const [seatingCapacity, setSeatingCapacity] = useState("");
     const [maxTakeoffWeightKg, setMaxTakeoffWeightKg] = useState("");
-
 
     function loadAircraft() {
         getAircraft()
@@ -19,20 +17,16 @@ function AircraftList() {
             .catch((error) => console.error("Error loading aircraft:", error));
     }
 
-
-
     useEffect(() => {
         loadAircraft();
     }, []);
-
-
 
     function handleCreateAircraft(event) {
         event.preventDefault();
 
         const newAircraft = {
             manufacturer,
-            type,
+            type: aircraftType,
             registration,
             seatingCapacity: Number(seatingCapacity),
             maxTakeoffWeightKg: Number(maxTakeoffWeightKg),
@@ -41,17 +35,15 @@ function AircraftList() {
         createAircraft(newAircraft)
             .then(() => {
                 loadAircraft();
-
                 setManufacturer("");
-                setType("");
+                setAircraftType("");
                 setRegistration("");
                 setSeatingCapacity("");
                 setMaxTakeoffWeightKg("");
+                setSelectedAircraft(null);
             })
             .catch((error) => console.error("Error creating aircraft:", error));
     }
-
-
 
     function handleDeleteAircraft(id) {
         deleteAircraft(id)
@@ -62,16 +54,11 @@ function AircraftList() {
             .catch((error) => console.error("Error deleting aircraft:", error));
     }
 
-
-
-
     return (
         <>
-
             <h2>Create Aircraft</h2>
 
             <form onSubmit={handleCreateAircraft}>
-
                 <div>
                     <input
                         type="text"
@@ -85,8 +72,8 @@ function AircraftList() {
                     <input
                         type="text"
                         placeholder="Type"
-                        value={type}
-                        onChange={(event) => setType(event.target.value)}
+                        value={aircraftType}
+                        onChange={(event) => setAircraftType(event.target.value)}
                     />
                 </div>
 
@@ -118,9 +105,7 @@ function AircraftList() {
                 </div>
 
                 <button type="submit">Create Aircraft</button>
-
             </form>
-
 
             <h2>Aircraft List</h2>
 
@@ -134,8 +119,6 @@ function AircraftList() {
 
             {selectedAircraft && (
                 <>
-
-
                     <p>Registration: {selectedAircraft.registration}</p>
                     <p>Manufacturer: {selectedAircraft.manufacturer}</p>
                     <p>Type: {selectedAircraft.type}</p>

@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { getFlights, updateFlightStatus, deleteFlight, createFlight } from "../api/api";
-import { getAirports, getAircraft } from "../api/api";
+import { getFlights, updateFlightStatus, deleteFlight, createFlight, getAirports, getAircraft } from "../api/api";
 
 function FlightList() {
   const [flights, setFlights] = useState([]);
   const [selectedFlight, setSelectedFlight] = useState(null);
-
-
 
   const [flightNumber, setFlightNumber] = useState("");
   const [originAirportId, setOriginAirportId] = useState("");
@@ -23,14 +20,8 @@ function FlightList() {
   const [status, setStatus] = useState("SCHEDULED");
   const [gate, setGate] = useState("");
 
-
-
   const [airports, setAirports] = useState([]);
   const [aircraft, setAircraft] = useState([]);
-
-
-
-
 
   function loadFlights() {
     getFlights()
@@ -38,39 +29,11 @@ function FlightList() {
       .catch((error) => console.error("Error loading flights:", error));
   }
 
-
   useEffect(() => {
     loadFlights();
-
     getAirports().then(setAirports);
     getAircraft().then(setAircraft);
   }, []);
-
-
-
-  function handeUpdateFlightStatus(id, status) {
-    updateFlightStatus(id, status)
-      .then(() => {
-        loadFlights();
-        setSelectedFlight(null);
-      })
-      .catch((error) => console.error("Error updating status:", error));
-  }
-
-
-
-
-  function handleDeleteFlight(id) {
-    deleteFlight(id)
-      .then(() => {
-        loadFlights();
-        setSelectedFlight(null);
-      })
-      .catch((error) => console.error("Error deleting flight:", error));
-  }
-
-
-
 
   function handleCreateFlight(event) {
     event.preventDefault();
@@ -108,14 +71,26 @@ function FlightList() {
       .catch((error) => console.error("Error creating flight:", error));
   }
 
+  function handleUpdateFlightStatus(id, newStatus) {
+    updateFlightStatus(id, newStatus)
+      .then(() => {
+        loadFlights();
+        setSelectedFlight(null);
+      })
+      .catch((error) => console.error("Error updating status:", error));
+  }
 
-
-
+  function handleDeleteFlight(id) {
+    deleteFlight(id)
+      .then(() => {
+        loadFlights();
+        setSelectedFlight(null);
+      })
+      .catch((error) => console.error("Error deleting flight:", error));
+  }
 
   return (
     <>
-
-
       <h2>Create Flight</h2>
 
       <form onSubmit={handleCreateFlight}>
@@ -233,24 +208,19 @@ function FlightList() {
         <button type="submit">Create Flight</button>
       </form>
 
-
-
       <h2>Flight List</h2>
 
       {flights.map((flight) => (
         <p key={flight.id} onClick={() => setSelectedFlight(flight)}>
-          {flight.flightNumber} - {flight.originAirport.code} to {flight.destinationAirport.code} - {flight.status}
+          {flight.flightNumber} - {flight.originAirport.code} to{" "}
+          {flight.destinationAirport.code} - {flight.status}
         </p>
       ))}
-
-
-
 
       <h3>Selected Flight:</h3>
 
       {selectedFlight && (
         <>
-
           <p>Flight Number: {selectedFlight.flightNumber}</p>
           <p>Departure: {selectedFlight.originAirport.city}</p>
           <p>Arrival: {selectedFlight.destinationAirport.city}</p>
@@ -258,15 +228,27 @@ function FlightList() {
 
           <p>Change status:</p>
 
-          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "SCHEDULED")}>
+          <button
+            onClick={() =>
+              handleUpdateFlightStatus(selectedFlight.id, "SCHEDULED")
+            }
+          >
             Set SCHEDULED
           </button>
 
-          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "BOARDING")}>
+          <button
+            onClick={() =>
+              handleUpdateFlightStatus(selectedFlight.id, "BOARDING")
+            }
+          >
             Set BOARDING
           </button>
 
-          <button onClick={() => handleUpdateFlightStatus(selectedFlight.id, "DELAYED")}>
+          <button
+            onClick={() =>
+              handleUpdateFlightStatus(selectedFlight.id, "DELAYED")
+            }
+          >
             Set DELAYED
           </button>
 
@@ -274,7 +256,6 @@ function FlightList() {
           <button onClick={() => handleDeleteFlight(selectedFlight.id)}>
             Delete
           </button>
-
         </>
       )}
     </>
